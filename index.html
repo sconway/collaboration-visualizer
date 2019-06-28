@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>three.js webgl - geometry - vertex colors</title>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap"
+            rel="stylesheet"
+        />
+        <link type="text/css" rel="stylesheet" href="main.css" />
+    </head>
+    <body>
+        <div id="canvas"></div>
+
+        <div id="landingScreen" class="landing-screen">
+            <section class="landing-screen__message">
+                <h1 class="landing-screen__message__header">
+                    Github Collaboration Visualizer
+                </h1>
+                <h2 class="landing-screen__message__sub-header">
+                    Cubes are generated for each contribution the specified
+                    Github user made on a given day. The more commits they have
+                    made that day, the larger (and darker) the cube will be.
+                </h2>
+
+                <input
+                    id="usernameInput"
+                    type="text"
+                    class="landing-screen__message__input"
+                    placeholder="Enter the Github username that you would like to visualize"
+                />
+
+                <button class="landing-screen__submit" id="submit">
+                    Let's Go
+                </button>
+            </section>
+        </div>
+
+        <figure id="contributionData" class="contribution-data">
+            <p id="contributionText" class="contribution-data__text"></p>
+        </figure>
+
+        <script src="js/three.min.js"></script>
+        <script src="js/stats.min.js"></script>
+        <script src="js/webGL.js"></script>
+        <script src="js/orbitControls.js"></script>
+        <script src="js/index.js"></script>
+    </body>
+</html>
