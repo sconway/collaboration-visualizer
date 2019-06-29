@@ -1,8 +1,4 @@
-(function() {
-    if (WEBGL.isWebGLAvailable() === false) {
-        document.body.appendChild(WEBGL.getWebGLErrorMessage());
-    }
-
+(function () {
     var container,
         stats,
         camera,
@@ -16,7 +12,9 @@
 
     function initRenderer() {
         container = document.getElementById("canvas");
-        renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer = new THREE.WebGLRenderer({
+            alpha: true
+        });
         renderer.setClearColor(0xffffff, 0);
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -60,11 +58,11 @@
             .filter(contribution => contribution.count > 0)
             .forEach(contribution => {
                 var sphereGeometry = new THREE.BoxGeometry(
-                    contribution.count * 14,
-                    contribution.count * 14,
-                    contribution.count * 14
+                    (contribution.count + 3) * 10,
+                    (contribution.count + 3) * 10,
+                    (contribution.count + 3) * 10
                 );
-                var material = new THREE.MeshPhongMaterial({
+                var material = new THREE.MeshLambertMaterial({
                     color: new THREE.Color(contribution.color)
                 });
 
@@ -113,13 +111,25 @@
         renderer.render(scene, camera);
     }
 
+    function injectStyles(elementId, stylesString) {
+        var el = document.getElementById(elementId);
+        el.setAttribute("style", stylesString)
+    }
+
     function fetchUserData(userName) {
+        showLoader();
+
         fetch(`https://github-contributions-api.now.sh/v1/${userName}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                removeLandingScreen();
-                init(data.contributions);
+                if (data.contributions.length > 1) {
+                    injectStyles("landingScreen", "opacity: 0; pointer-events: none;");
+                    init(data.contributions);
+                } else {
+                    injectStyles("error", "opacity: 1;");
+                    hideLoader();
+                }
             })
             .catch(error => {
                 console.log("ERROR FETCHING: ", error);
@@ -127,25 +137,29 @@
     }
 
     function handleContributionHover(contributionData) {
-        var dataContainer = document.getElementById("contributionData");
         var contributionText = document.getElementById("contributionText");
 
         contributionText.innerText = `${contributionData.count} ${
             contributionData.count > 1 ? "commits" : "commit"
         } on ${contributionData.date}`;
 
-        dataContainer.setAttribute("style", `opacity: 1;`);
+        injectStyles("contributionData", "opacity: 1;")
+        injectStyles("canvas", "cursor: pointer;")
     }
 
     function handleContributionUnHover() {
-        var dataContainer = document.getElementById("contributionData");
-        dataContainer.setAttribute("style", "opacity: 0;");
+        injectStyles("contributionData", "opacity: 0;")
+        injectStyles("canvas", "cursor: move;")
     }
 
-    function removeLandingScreen() {
-        document
-            .getElementById("landingScreen")
-            .setAttribute("style", "opacity: 0; pointer-events: none;");
+    function showLoader() {
+        injectStyles("submit", "background: transparent; color: transparent;")
+        injectStyles("loader", "display: block;")
+    }
+
+    function hideLoader() {
+        injectStyles("submit", "")
+        injectStyles("loader", "")
     }
 
     function handleIntersections() {
@@ -179,8 +193,9 @@
     function handleUserInput() {
         document
             .getElementById("submit")
-            .addEventListener("click", function(event) {
+            .addEventListener("click", function (event) {
                 event.preventDefault();
+
                 var inputField = document.getElementById("usernameInput");
                 var inputValue = inputField.value;
 
@@ -190,6 +205,21 @@
                     inputField.focus();
                 }
             });
+
+        document.getElementById("usernameInput").addEventListener("keydown", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+
+                var inputField = document.getElementById("usernameInput");
+                var inputValue = inputField.value;
+
+                if (inputValue.length > 1) {
+                    fetchUserData(inputValue.trim());
+                } else {
+                    inputField.focus();
+                }
+            }
+        })
     }
 
     function init(contributions) {

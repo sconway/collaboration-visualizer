@@ -1,23 +1,27 @@
 body,
 html,
 #canvas {
-    background-color: #fff;
+    background-color: #0f151d;
     background: radial-gradient(
         circle,
-        rgba(255, 255, 255, 1) 0%,
-        rgba(225, 225, 225, 1) 80%
+        rgba(40, 50, 74, 1) 0%,
+        rgba(15, 21, 29, 1) 100%
     );
-    font-family: "Titillium Web", sans-serif;
+    cursor: move;
+    font-family: arial, sans-serif;
+    letter-spacing: 1px;
     margin: 0;
     height: 100%;
     width: 100%;
     overflow: hidden;
 }
 
+/* Commit message */
 .contribution-data {
+    color: #fff;
     margin: 0;
     opacity: 0;
-    padding: 10px 20px;
+    padding: 0px 20px;
     position: absolute;
     top: 0;
     right: 0;
@@ -29,13 +33,10 @@ html,
     font-size: 24px;
 }
 
+/* Intro Screen Message */
 .landing-screen {
-    background-color: #fff;
-    background: radial-gradient(
-        circle,
-        rgba(255, 255, 255, 1) 0%,
-        rgba(225, 225, 225, 1) 80%
-    );
+    background-color: #0f151d;
+    cursor: pointer;
     opacity: 1;
     position: absolute;
     left: 0;
@@ -47,46 +48,112 @@ html,
 }
 
 .landing-screen__message {
-    background-color: #fff;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-    padding: 30px;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 40px;
     position: absolute;
+    min-width: 470px;
+    max-width: 600px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
 }
 
 .landing-screen__message__header {
+    font-family: "Press Start 2P", cursive;
     font-size: 28px;
+    line-height: 1.5;
     margin-bottom: 30px;
+    margin-top: 0;
+    text-align: center;
 }
 
 .landing-screen__message__sub-header {
     font-size: 22px;
+    font-weight: normal;
     margin-bottom: 40px;
     line-height: 1.5;
 }
 
 .landing-screen__message__input {
     display: block;
-    font-size: 20px;
+    font-size: 16px;
     margin-bottom: 20px;
     padding: 20px;
     width: calc(100% - 40px);
 }
 
-.landing-screen__submit {
-    border: 1px solid black;
-    background: black;
+.landing-screen__message__error {
+    color: red;
+    opacity: 0;
+    margin-bottom: 20px;
+    transition: opacity 200ms ease;
+}
+
+.landing-screen__submit,
+.landing-screen__submit:focus {
+    border: 2px solid #fff;
+    background: #0f151d;
     color: #fff;
     cursor: pointer;
+    display: block;
+    font-family: "Press Start 2P", cursive;
     font-size: 18px;
     outline: transparent;
-    padding: 15px 20px;
+    margin: 0 auto;
+    padding: 25px 30px;
+    position: relative;
+    text-transform: uppercase;
     transition: all 200ms ease;
 }
 
 .landing-screen__submit:hover {
     background: #fff;
-    color: #000;
+    color: #0f151d;
+}
+
+/* Loading Spinner */
+.loader {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    transform: translate(-50%, -50%);
+}
+
+.loader span {
+    border: 6px solid #fff;
+    border-radius: 50%;
+    border-color: #fff transparent transparent transparent;
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    margin: 6px;
+    animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+.loader span:nth-child(1) {
+    animation-delay: -0.45s;
+}
+
+.loader span:nth-child(2) {
+    animation-delay: -0.3s;
+}
+
+.loader span:nth-child(3) {
+    animation-delay: -0.15s;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
